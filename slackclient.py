@@ -1,4 +1,5 @@
 import requests
+import datetime
 
 class SlackError(Exception):
     pass
@@ -6,9 +7,9 @@ class SlackError(Exception):
 class SlackClient(object):
     BASE_URL = 'https://slack.com/api'
     
-    def __init__(self, verify=False):
+    def __init__(self, file, verify=False):
         self.properties = {}
-        with open("keys/coffeeandcode.properties", 'r') as inFile:
+        with open("keys/" + file + ".properties", 'r') as inFile:
             for line in inFile:
                 propertyLine = line.split('=')
                 self.properties[propertyLine[0]] = propertyLine[1].rstrip()
@@ -96,33 +97,33 @@ class SlackClient(object):
             'channel': channel,
             'ts': ts
         })
-        return self._make_request(method, True, params)
+        return self._make_request(method, False, params)
     
     def get_bot_info(self, **params):
         method = 'bots.info'
         params.update({
-            'bot': 'BFRG3R495'
+            'bot': self.properties['bot.id']
         })
         return self._make_request(method, False, params)
 
-client = SlackClient()
-channel = '#bot_sandbox'
+#client = SlackClient()
+#channel = '#bot_sandbox'
 
-chatResponse = client.chat_read(channel, None).json()
+#chatResponse = client.chat_read(channel, None).json()
 
 # BFRG3R495
 
-if(True == False):
-    for item in chatResponse['messages'] :
-        print(item['ts'])
-        if('bot_id' in item and item['bot_id'] == "BFRG3R495"):
-            client.chat_delete_message(channel, item['ts'])
+#if(True == False):
+#    for item in chatResponse['messages'] :
+#        print(item['ts'])
+#        if('bot_id' in item and item['bot_id'] == "BFRG3R495"):
+#            client.chat_delete_message(channel, item['ts'])
 
-print(" ")
+#print(" ")
 
-for item in chatResponse['messages'] :
-    print(item)
+#for item in chatResponse['messages'] :
+#    print(item)
     
-chatResponse = client.get_bot_info()
-print(chatResponse.text)
+#chatResponse = client.get_bot_info()
+#print(chatResponse.text)
 # client.chat_post_message(channel, "Testing, Testing, 1 2 3!", username="Launch Bot")
