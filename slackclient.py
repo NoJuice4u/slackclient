@@ -33,7 +33,8 @@ class SlackClient(object):
         if(authorization is not None):
             params = {'client_id': self.properties['client.id'], 'client_secret': self.properties['client.secret'], 'code': authorization, 'redirect_uri': 'http://localhost'}
             rtmResponse = self._make_api_request("oauth.access", True, params)
-            self.botAccessToken = rtmResponse.json()['bot_access_token']
+            print(rtmResponse.json())
+            self.botAccessToken = rtmResponse.json()['access_token']
         
         if(token is not None):
             self.botAccessToken = token
