@@ -39,7 +39,20 @@ class SlackClient(object):
         if(token is not None):
             self.botAccessToken = token
         self.channel = self.channel_name_to_id(self.properties['default.channel'][1:])
+        
+        if(authorization is not None):
+            # RTM -- # https://slack.com/oauth/authorize?client_id=182473328642.336524346324&response_type=code&redirect_uri=http://localhost&scope=bot
+            params = {'client_id': self.properties['client.id'], 'client_secret': self.properties['client.secret'], 'code': authorization, 'redirect_uri': 'http://localhost'}
+            rtmResponse = self._make_api_request("oauth.access", True, params)
+            self.botAccessToken = rtmResponse.json()['bot_access_token']
+        
+        if(token is not None):
+            self.botAccessToken = token
 
+<<<<<<< HEAD
+=======
+## {'ok': True, 'access_token': 'xoxp-182473328642-268056090199-535906645510-5b1c8c783d9f478e5b02b580da81c872', 'scope': 'identify,bot,channels:history,channels:read,team:read,channels:write', 'user_id': 'U7W1N2N5V', 'team_name': 'Coffee and Code', 'team_id': 'T5CDX9NJW', 'bot': {'bot_user_id': 'UFRG3R4B1', 'bot_access_token': 'xoxb-182473328642-535547854375-eubwk7Rz5Ev48Qv8aGaWLg6M'}}
+>>>>>>> 2e97ffc2e77b710f102872a296f94e6b90a43052
         params = {'token': self.botAccessToken}
         rtmConnect = self._make_api_request("rtm.connect", False, params)
         self.webSocketUrl = rtmConnect.json()['url']
